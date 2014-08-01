@@ -529,7 +529,7 @@ class YAMLDocstringParser(object):
         yaml_string = formatting.dedent(yaml_string)
         try:
             return yaml.load(yaml_string)
-        except yaml.YAMLError, e:
+        except yaml.YAMLError as e:
             self.yaml_error = e
             return None
 
