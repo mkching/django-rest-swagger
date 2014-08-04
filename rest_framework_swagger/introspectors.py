@@ -763,7 +763,7 @@ class YAMLDocstringParser(object):
         Merges parameters lists by key
         """
         merged = OrderedDict()
-        for item in params1 + params2:
+        for item in list(params1) + list(params2):
             merged[item[key]] = item
 
         return [val for (_, val) in merged.items()]
