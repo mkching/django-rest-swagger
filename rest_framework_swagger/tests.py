@@ -665,8 +665,8 @@ class YAMLDocstringParserTests(TestCase):
         self.assertEqual(2, len(params))
         query_params = parser._filter_params(params, 'paramType', 'query')
         form_params = parser._filter_params(params, 'paramType', 'form')
-        self.assertEqual(1, len(query_params))
-        self.assertEqual(1, len(form_params))
+        self.assertEqual(1, len(list(query_params)))
+        self.assertEqual(1, len(list(form_params)))
 
     def test_response_messages(self):
         class SerializedAPI(ListCreateAPIView):
