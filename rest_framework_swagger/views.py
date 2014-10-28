@@ -13,6 +13,8 @@ from rest_framework_swagger.docgenerator import DocumentationGenerator
 
 from rest_framework_swagger import SWAGGER_SETTINGS
 
+def _exclude_paths(apis):
+    return [api for api in apis if not any(api['path'] == x for x in SWAGGER_SETTINGS.get('exclude_paths'))]
 
 class SwaggerUIView(View):
 
@@ -61,12 +63,12 @@ class SwaggerResourcesView(APIDocView):
             'apiVersion': SWAGGER_SETTINGS.get('api_version', ''),
             'swaggerVersion': '1.2',
             'basePath': self.host.rstrip('/'),
-            'apis': apis
+            'apis': _exclude_paths(apis)
         })
 
     def get_resources(self):
         urlparser = UrlParser()
-        apis = urlparser.get_apis(exclude_namespaces=SWAGGER_SETTINGS.get('exclude_namespaces'))
+        apis = _exclude_paths(urlparser.get_apis(exclude_namespaces=SWAGGER_SETTINGS.get('exclude_namespaces')))
         resources = urlparser.get_top_level_apis(apis)
 
         return resources
@@ -77,7 +79,7 @@ class SwaggerApiView(APIDocView):
     renderer_classes = (JSONRenderer,)
 
     def get(self, request, path):
-        apis = self.get_api_for_resource(path)
+        apis = _exclude_paths(self.get_api_for_resource(path))
         generator = DocumentationGenerator()
 
         return Response({
@@ -91,4 +93,4 @@ class SwaggerApiView(APIDocView):
 
     def get_api_for_resource(self, filter_path):
         urlparser = UrlParser()
-        return urlparser.get_apis(filter_path=filter_path)
+        return _exclude_paths(urlparser.get_apis(filter_path=filter_path))
