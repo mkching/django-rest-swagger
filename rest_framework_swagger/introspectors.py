@@ -11,9 +11,10 @@ from collections import OrderedDict
 from abc import ABCMeta, abstractmethod
 
 from django.contrib.admindocs.utils import trim_docstring
+from django.utils.encoding import smart_text
 
 from rest_framework.views import get_view_name, get_view_description
-from rest_framework.compat import apply_markdown, smart_text
+from rest_framework.compat import apply_markdown
 from rest_framework.utils import formatting
 
 
